@@ -33,7 +33,11 @@ module.exports = {
   },
 
   // Database
-  databaseUrl: process.env.DATABASE_URL || 'sqlite:database.sqlite',
+  databaseHost: process.env.DATABASE_HOST || '127.0.0.1',
+  databasePort: process.env.DATABASE_PORT || '3306',
+  databaseUsername: process.env.DATABASE_USERNAME || 'root',
+  databasePassword: process.env.DATABASE_PASSWORD || '',
+  databaseName: process.env.DATABASE_NAME || 'react_starter_kit',
 
   // Web analytics
   analytics: {

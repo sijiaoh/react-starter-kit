@@ -10,7 +10,13 @@
 import Sequelize, { Op } from 'sequelize';
 import config from '../config';
 
-const sequelize = new Sequelize(config.databaseUrl, {
+const sequelize = new Sequelize({
+  host: config.databaseHost,
+  port: config.databasePort,
+  username: config.databaseUsername,
+  password: config.databasePassword,
+  database: config.databaseName,
+  dialect: 'mysql',
   operatorsAliases: Op,
   define: {
     freezeTableName: true,
