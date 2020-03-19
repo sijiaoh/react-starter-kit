@@ -7,36 +7,22 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
+import path from 'path';
+import glob from 'glob';
 import sequelize from '../sequelize';
-import User from './User';
-import UserLogin from './UserLogin';
-import UserClaim from './UserClaim';
-import UserProfile from './UserProfile';
 
-User.hasMany(UserLogin, {
-  foreignKey: 'userId',
-  as: 'logins',
-  onUpdate: 'cascade',
-  onDelete: 'cascade',
-});
-
-User.hasMany(UserClaim, {
-  foreignKey: 'userId',
-  as: 'claims',
-  onUpdate: 'cascade',
-  onDelete: 'cascade',
-});
-
-User.hasOne(UserProfile, {
-  foreignKey: 'userId',
-  as: 'profile',
-  onUpdate: 'cascade',
-  onDelete: 'cascade',
-});
+const models = glob
+  .sync('./src/data/models/*.js')
+  .map(file => path.basename(file, '.js'))
+  .filter(file => file !== 'index')
+  .reduce((obj, file) => {
+    // eslint-disable-next-line no-param-reassign, global-require, import/no-dynamic-require
+    obj[file] = require(`./${file}`);
+    return obj;
+  }, {});
 
 function sync(...args) {
   return sequelize.sync(...args);
 }
 
-export default { sync };
-export { User, UserLogin, UserClaim, UserProfile };
+export default { sync, ...models };
