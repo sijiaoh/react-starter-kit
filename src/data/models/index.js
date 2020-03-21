@@ -12,7 +12,7 @@ import glob from 'glob';
 import sequelize from '../sequelize';
 
 const models = glob
-  .sync('./src/data/models/*.js')
+  .sync(path.join(process.cwd(), 'src', 'data', 'models', '*.js'))
   .map(file => path.basename(file, '.js'))
   .filter(file => file !== 'index')
   .reduce((obj, file) => {
