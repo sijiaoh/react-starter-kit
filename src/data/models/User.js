@@ -22,18 +22,18 @@ const User = Model.define(
       primaryKey: true,
     },
 
-    email: {
-      type: DataType.STRING(255),
-      validate: { isEmail: true },
-    },
-
-    emailConfirmed: {
-      type: DataType.BOOLEAN,
-      defaultValue: false,
+    uid: {
+      type: DataType.STRING,
+      allowNull: false,
     },
   },
   {
-    indexes: [{ fields: ['email'] }],
+    indexes: [
+      {
+        unique: true,
+        fields: ['uid'],
+      },
+    ],
   },
 );
 
