@@ -7,9 +7,9 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import path from 'path';
-import glob from 'glob';
-import sequelize from '../sequelize';
+const path = require('path');
+const glob = require('glob');
+const sequelize = require('../sequelize').default;
 
 const models = glob
   .sync(path.join(process.cwd(), 'src', 'data', 'models', '*.js'))
@@ -17,7 +17,7 @@ const models = glob
   .filter(file => file !== 'index')
   .reduce((obj, file) => {
     // eslint-disable-next-line no-param-reassign, global-require, import/no-dynamic-require
-    obj[file] = require(`./${file}`);
+    obj[file] = require(`./${file}`).default;
     return obj;
   }, {});
 
@@ -25,4 +25,4 @@ function sync(...args) {
   return sequelize.sync(...args);
 }
 
-export default { sync, ...models };
+module.exports = { sync, ...models };

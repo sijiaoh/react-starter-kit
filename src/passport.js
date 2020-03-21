@@ -15,6 +15,7 @@
 
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
+import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import config from './config';
 import sequelize from './data/sequelize';
 
@@ -33,7 +34,7 @@ async function login(req, loginName, profile, claims, done) {
     }
 
     // Already logged in with this UserLogin.
-    if (userLogin) done(null, req.user);
+    if (userLogin) done(null);
     else {
       // Add oauth association to user.
       await sequelize
@@ -54,7 +55,7 @@ async function login(req, loginName, profile, claims, done) {
 
           return promise;
         })
-        .then(() => done(null, req.user))
+        .then(() => done(null))
         .catch(err => done(err));
     }
   }
@@ -105,6 +106,28 @@ passport.use(
     (req, accessToken, refreshToken, profile, done) => {
       const loginName = 'facebook';
       const claimType = 'urn:facebook:access_token';
+      const claims = [{ type: claimType, key: accessToken }];
+
+      login(req, loginName, profile, claims, done).catch(done);
+    },
+  ),
+);
+
+/**
+ * Sign in with Google.
+ */
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: config.auth.google.id,
+      clientSecret: config.auth.google.secret,
+      callbackURL: '/login/google/return',
+      profileFields: ['displayName'],
+      passReqToCallback: true,
+    },
+    (req, accessToken, refreshToken, profile, done) => {
+      const loginName = 'google';
+      const claimType = 'urn:google:access_token';
       const claims = [{ type: claimType, key: accessToken }];
 
       login(req, loginName, profile, claims, done).catch(done);

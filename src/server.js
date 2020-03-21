@@ -26,11 +26,12 @@ import errorPageStyle from './routes/error/ErrorPage.css';
 import createFetch from './createFetch';
 import passport from './passport';
 import router from './router';
-import models from './data/models';
 import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
+
+const models = require('./data/models');
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at:', p, 'reason:', reason);
@@ -84,25 +85,31 @@ app.use((err, req, res, next) => {
 
 app.use(passport.initialize());
 
-app.get(
-  '/login/facebook',
-  passport.authenticate('facebook', {
-    session: false,
-  }),
-);
-app.get(
-  '/login/facebook/return',
-  passport.authenticate('facebook', {
-    failureRedirect: '/login',
-    session: false,
-  }),
-  (req, res) => {
-    const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
-    res.cookie('id_token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
-    res.redirect('/');
-  },
-);
+['facebook', 'google'].forEach(provider => {
+  app.get(
+    `/login/${provider}`,
+    passport.authenticate(provider, {
+      scope: ['email'],
+      session: false,
+    }),
+  );
+  app.get(
+    `/login/${provider}/return`,
+    passport.authenticate(provider, {
+      failureRedirect: '/login',
+      session: false,
+    }),
+    (req, res) => {
+      const expiresIn = 60 * 60 * 24 * 180; // 180 days
+      const token = jwt.sign(req.user, config.auth.jwt.secret, { expiresIn });
+      res.cookie('id_token', token, {
+        maxAge: 1000 * expiresIn,
+        httpOnly: true,
+      });
+      res.redirect('/');
+    },
+  );
+});
 
 //
 // Register API middleware
