@@ -1,2 +1,4 @@
 // Context used by boty server and client.
-export default {};
+export default {
+  siteTitle: 'react-starter-kit',
+};
