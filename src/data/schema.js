@@ -13,11 +13,16 @@ import {
 } from 'graphql';
 
 const queries = require('./queries');
+const mutations = require('./mutations');
 
 const schema = new Schema({
   query: new ObjectType({
     name: 'Query',
     fields: queries,
+  }),
+  mutation: new ObjectType({
+    name: 'Mutation',
+    fields: mutations,
   }),
 });
 
