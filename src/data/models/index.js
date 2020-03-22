@@ -8,18 +8,10 @@
  */
 
 const path = require('path');
-const glob = require('glob');
 const sequelize = require('../sequelize').default;
+const requireAll = require('../../requireAll');
 
-const models = glob
-  .sync(path.join(process.cwd(), 'src', 'data', 'models', '*.js'))
-  .map(file => path.basename(file, '.js'))
-  .filter(file => file !== 'index')
-  .reduce((obj, file) => {
-    // eslint-disable-next-line no-param-reassign, global-require, import/no-dynamic-require
-    obj[file] = require(`./${file}`).default;
-    return obj;
-  }, {});
+const models = requireAll(path.join(process.cwd(), 'src', 'data', 'models'));
 
 function sync(...args) {
   return sequelize.sync(...args);
