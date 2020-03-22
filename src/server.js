@@ -30,6 +30,7 @@ import schema from './data/schema';
 // import assets from './asset-manifest.json'; // eslint-disable-line import/no-unresolved
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
+import globalContext from './globalContext';
 
 const models = require('./data/models');
 
@@ -149,6 +150,7 @@ app.get('*', async (req, res, next) => {
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
     const context = {
+      ...globalContext,
       fetch,
       // The twins below are wild, be careful!
       pathname: req.path,
