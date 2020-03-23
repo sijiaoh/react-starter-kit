@@ -117,10 +117,10 @@ app.use(passport.initialize());
 // -----------------------------------------------------------------------------
 app.use(
   '/graphql',
-  expressGraphQL(req => ({
+  expressGraphQL((req, res) => ({
     schema,
     graphiql: __DEV__,
-    rootValue: { request: req },
+    rootValue: { request: req, response: res },
     pretty: __DEV__,
   })),
 );
