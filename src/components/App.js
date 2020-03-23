@@ -41,7 +41,7 @@ export default function App({ context, insertCss, children }) {
   // please do that inside the Layout component.
   return (
     <StyleContext.Provider value={{ insertCss }}>
-      <ApplicationContext.Provider value={{ context }}>
+      <ApplicationContext.Provider value={{ ...context }}>
         {React.Children.only(children)}
       </ApplicationContext.Provider>
     </StyleContext.Provider>
