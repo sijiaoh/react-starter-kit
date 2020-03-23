@@ -145,6 +145,7 @@ app.get('*', async (req, res, next) => {
       cookie: req.headers.cookie,
       schema,
       graphql,
+      rootValue: { request: req, response: res },
     });
 
     // Global (context) variables that can be easily accessed from any React component

@@ -18,6 +18,7 @@ type Options = {
   cookie?: string,
   schema?: GraphQLSchema,
   graphql?: graphqType,
+  rootValue?: Object,
 };
 
 /**
@@ -28,7 +29,7 @@ type Options = {
  */
 function createFetch(
   fetch: Fetch,
-  { baseUrl, cookie, schema, graphql }: Options,
+  { baseUrl, cookie, schema, graphql, rootValue }: Options,
 ) {
   // NOTE: Tweak the default options to suite your application needs
   const defaults = {
@@ -50,7 +51,7 @@ function createFetch(
       const result = await graphql(
         schema,
         query.query,
-        { request: {} }, // fill in request vars needed by graphql
+        rootValue,
         null,
         query.variables,
       );
