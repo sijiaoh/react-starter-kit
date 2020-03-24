@@ -160,7 +160,7 @@ app.get('*', async (req, res, next) => {
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
-      isLoggedIn: () => req.cookies.loggedIn === '1',
+      cookies: { get: key => req.cookies[key] },
     };
 
     const route = await router.resolve(context);

@@ -39,7 +39,7 @@ const context = {
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
-  isLoggedIn: () => Cookies.get('loggedIn') === '1',
+  cookies: { get: key => Cookies.get(key) },
 };
 
 const container = document.getElementById('app');
