@@ -40,9 +40,7 @@ export default function App({ context, insertCss, children }) {
   // NOTE: If you need to add or modify header, footer etc. of the app,
   // please do that inside the Layout component.
 
-  const [loggedIn, setLoggedIn] = useState(
-    context.cookies.get('loggedIn') === '1',
-  );
+  const [loggedIn, setLoggedIn] = useState(context.isLoggedIn());
 
   return (
     <StyleContext.Provider value={{ insertCss }}>
@@ -68,7 +66,7 @@ App.propTypes = {
     fetch: PropTypes.func.isRequired,
     pathname: PropTypes.string.isRequired,
     query: PropTypes.object,
-    cookies: PropTypes.object.isRequired,
+    isLoggedIn: PropTypes.func.isRequired,
     authenticateUser: PropTypes.func.isRequired,
   }).isRequired,
   children: PropTypes.element.isRequired,

@@ -173,7 +173,7 @@ app.get('*', async (req, res, next) => {
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
-      cookies,
+      isLoggedIn: () => req.cookies.loggedIn === '1',
       authenticateUser,
     };
 

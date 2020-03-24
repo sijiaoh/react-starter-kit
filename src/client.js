@@ -47,7 +47,7 @@ const context = {
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
-  cookies,
+  isLoggedIn: () => Cookies.get('loggedIn') === '1',
   authenticateUser: createAuthenticateUser(cookies),
 };
 
