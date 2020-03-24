@@ -163,7 +163,10 @@ app.get('*', async (req, res, next) => {
       },
     };
 
-    const authenticateUser = createAuthenticateUser(cookies);
+    const authenticateUser = createAuthenticateUser({
+      cookies,
+      getLocation: () => req.path,
+    });
 
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html

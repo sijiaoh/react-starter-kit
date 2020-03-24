@@ -48,7 +48,10 @@ const context = {
     baseUrl: window.App.apiUrl,
   }),
   isLoggedIn: () => Cookies.get('loggedIn') === '1',
-  authenticateUser: createAuthenticateUser(cookies),
+  authenticateUser: createAuthenticateUser({
+    cookies,
+    getLocation: () => window.location.pathname,
+  }),
 };
 
 const container = document.getElementById('app');

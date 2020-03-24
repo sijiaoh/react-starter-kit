@@ -1,9 +1,7 @@
-import history from './history';
-
-export default cookies => {
+export default ({ cookies, getLocation }) => {
   return defaultRes => {
     if (cookies.get('loggedIn') !== '1') {
-      cookies.set('forwardingUrl', history.location.pathname);
+      cookies.set('forwardingUrl', getLocation());
       return { redirect: '/login' };
     }
     return defaultRes;
