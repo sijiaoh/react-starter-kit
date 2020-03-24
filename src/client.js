@@ -39,6 +39,7 @@ const context = {
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
+  isLoggedIn: () => Cookies.get('loggedIn') === '1',
 };
 
 const container = document.getElementById('app');
@@ -82,11 +83,7 @@ async function onLocationChange(location, action) {
 
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
-      <App
-        context={context}
-        loggedIn={Cookies.get('loggedIn') === '1'}
-        insertCss={insertCss}
-      >
+      <App context={context} insertCss={insertCss}>
         {route.component}
       </App>,
       container,

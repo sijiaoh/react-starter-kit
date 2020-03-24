@@ -36,19 +36,19 @@ import ApplicationContext from './ApplicationContext';
  *   );
  */
 
-export default function App({ context, loggedIn, insertCss, children }) {
+export default function App({ context, insertCss, children }) {
   // NOTE: If you need to add or modify header, footer etc. of the app,
   // please do that inside the Layout component.
 
-  const [loggedInState, setLoggedInState] = useState(loggedIn);
+  const [loggedIn, setLoggedIn] = useState(context.isLoggedIn());
 
   return (
     <StyleContext.Provider value={{ insertCss }}>
       <ApplicationContext.Provider
         value={{
           ...context,
-          loggedIn: loggedInState,
-          logout: () => setLoggedInState(false),
+          loggedIn,
+          logout: () => setLoggedIn(false),
         }}
       >
         {React.Children.only(children)}
@@ -66,7 +66,7 @@ App.propTypes = {
     fetch: PropTypes.func.isRequired,
     pathname: PropTypes.string.isRequired,
     query: PropTypes.object,
+    isLoggedIn: PropTypes.func.isRequired,
   }).isRequired,
-  loggedIn: PropTypes.bool.isRequired,
   children: PropTypes.element.isRequired,
 };

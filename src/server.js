@@ -160,6 +160,7 @@ app.get('*', async (req, res, next) => {
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
+      isLoggedIn: () => req.cookies.loggedIn === '1',
     };
 
     const route = await router.resolve(context);
@@ -171,11 +172,7 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <App
-        context={context}
-        loggedIn={req.cookies.loggedIn === '1'}
-        insertCss={insertCss}
-      >
+      <App context={context} insertCss={insertCss}>
         {route.component}
       </App>,
     );
