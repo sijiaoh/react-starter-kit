@@ -1,6 +1,11 @@
 const path = require('path');
 const glob = require('glob');
 
+/**
+ * Usage example:
+ *   const requireAll = require('./requireAll');
+ *   const foo = requireAll(path.join(process.cwd(), 'bar'));
+ */
 module.exports = dirName => {
   return glob
     .sync(path.join(dirName, '*.js'))
