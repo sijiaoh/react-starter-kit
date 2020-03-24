@@ -69,6 +69,7 @@ App.propTypes = {
     pathname: PropTypes.string.isRequired,
     query: PropTypes.object,
     cookies: PropTypes.object.isRequired,
+    authenticateUser: PropTypes.func.isRequired,
   }).isRequired,
   children: PropTypes.element.isRequired,
 };

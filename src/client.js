@@ -20,6 +20,7 @@ import history from './history';
 import { updateMeta } from './DOMUtils';
 import router from './router';
 import globalContext from './globalContext';
+import createAuthenticateUser from './createAuthenticateUser';
 
 // Enables critical path CSS rendering
 // https://github.com/kriasoft/isomorphic-style-loader
@@ -31,6 +32,13 @@ const insertCss = (...styles) => {
   };
 };
 
+const cookies = {
+  get: key => Cookies.get(key),
+  set: (key, value) => {
+    Cookies.set(key, value);
+  },
+};
+
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
 const context = {
@@ -39,7 +47,8 @@ const context = {
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
-  cookies: { get: key => Cookies.get(key) },
+  cookies,
+  authenticateUser: createAuthenticateUser(cookies),
 };
 
 const container = document.getElementById('app');

@@ -31,6 +31,7 @@ import schema from './data/schema';
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import globalContext from './globalContext';
+import createAuthenticateUser from './createAuthenticateUser';
 
 const models = require('./data/models');
 
@@ -111,7 +112,7 @@ app.use(passport.initialize());
       res.cookie('loggedIn', 1, {
         maxAge: 1000 * expiresIn,
       });
-      res.redirect('/');
+      res.redirect(req.cookies.forwardingUrl || '/');
     },
   );
 });
@@ -152,6 +153,18 @@ app.get('*', async (req, res, next) => {
       rootValue: { request: req, response: res },
     });
 
+    const expiresIn = 60 * 60 * 24 * 180; // 180 days
+    const cookies = {
+      get: key => req.cookies[key],
+      set: (key, value) => {
+        res.cookie(key, value, {
+          maxAge: 1000 * expiresIn,
+        });
+      },
+    };
+
+    const authenticateUser = createAuthenticateUser(cookies);
+
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
     const context = {
@@ -160,7 +173,8 @@ app.get('*', async (req, res, next) => {
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
-      cookies: { get: key => req.cookies[key] },
+      cookies,
+      authenticateUser,
     };
 
     const route = await router.resolve(context);
