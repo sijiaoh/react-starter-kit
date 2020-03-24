@@ -6,7 +6,10 @@ const glob = require('glob');
  *   const requireAll = require('./requireAll');
  *   const foo = requireAll(path.join(process.cwd(), 'bar'));
  */
-module.exports = dirName => {
+module.exports = (dirName, { excludes } = {}) => {
+  // eslint-disable-next-line no-param-reassign
+  if (!excludes) excludes = [];
+  excludes.push('index');
   return glob
     .sync(path.join(dirName, '*.js'))
     .map(filePath => ({
@@ -16,7 +19,7 @@ module.exports = dirName => {
         path.resolve(filePath),
       ),
     }))
-    .filter(({ fileName }) => fileName !== 'index')
+    .filter(({ fileName }) => !excludes.some(exclude => exclude === fileName))
     .reduce((obj, { fileName, filePath }) => {
       // eslint-disable-next-line no-param-reassign, global-require, import/no-dynamic-require
       obj[fileName] = require(`./${filePath}`).default;
