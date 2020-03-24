@@ -67,6 +67,8 @@ App.propTypes = {
     pathname: PropTypes.string.isRequired,
     query: PropTypes.object,
     isLoggedIn: PropTypes.func.isRequired,
+    getCurrentPath: PropTypes.func.isRequired,
+    storeForwardingPath: PropTypes.func.isRequired,
     authenticateUser: PropTypes.func.isRequired,
   }).isRequired,
   children: PropTypes.element.isRequired,

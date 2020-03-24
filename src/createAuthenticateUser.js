@@ -1,9 +1,6 @@
-export default ({ cookies, getLocation }) => {
+export default ({ isLoggedIn }) => {
   return defaultRes => {
-    if (cookies.get('loggedIn') !== '1') {
-      cookies.set('forwardingUrl', getLocation());
-      return { redirect: '/login' };
-    }
+    if (!isLoggedIn()) return { redirect: '/login' };
     return defaultRes;
   };
 };

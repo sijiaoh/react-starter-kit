@@ -112,7 +112,7 @@ app.use(passport.initialize());
       res.cookie('loggedIn', 1, {
         maxAge: 1000 * expiresIn,
       });
-      res.redirect(req.cookies.forwardingUrl || '/');
+      res.redirect(req.cookies.forwardingPath || '/');
     },
   );
 });
@@ -153,20 +153,11 @@ app.get('*', async (req, res, next) => {
       rootValue: { request: req, response: res },
     });
 
-    const expiresIn = 60 * 60 * 24 * 180; // 180 days
-    const cookies = {
-      get: key => req.cookies[key],
-      set: (key, value) => {
-        res.cookie(key, value, {
-          maxAge: 1000 * expiresIn,
-        });
-      },
-    };
-
+    const isLoggedIn = () => req.cookies.loggedIn === '1';
     const authenticateUser = createAuthenticateUser({
-      cookies,
-      getLocation: () => req.path,
+      isLoggedIn,
     });
+    const getCurrentPath = () => decodeURI(req.path);
 
     // Global (context) variables that can be easily accessed from any React component
     // https://facebook.github.io/react/docs/context.html
@@ -176,7 +167,13 @@ app.get('*', async (req, res, next) => {
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
-      isLoggedIn: () => req.cookies.loggedIn === '1',
+      isLoggedIn,
+      getCurrentPath,
+      storeForwardingPath: () => {
+        res.cookie('forwardingPath', getCurrentPath(), {
+          maxAge: 1000 * 60 * 60 * 24 * 180, // 180 days
+        });
+      },
       authenticateUser,
     };
 

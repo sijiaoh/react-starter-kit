@@ -51,7 +51,9 @@ const routes = {
     },
   ],
 
-  async action({ siteTitle, next }) {
+  async action({ siteTitle, getCurrentPath, storeForwardingPath, next }) {
+    if (!getCurrentPath().startsWith('/login')) storeForwardingPath();
+
     // Execute each child route until one of them return the result
     const route = await next();
 

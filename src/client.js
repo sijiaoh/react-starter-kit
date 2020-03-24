@@ -32,12 +32,8 @@ const insertCss = (...styles) => {
   };
 };
 
-const cookies = {
-  get: key => Cookies.get(key),
-  set: (key, value) => {
-    Cookies.set(key, value);
-  },
-};
+const isLoggedIn = () => Cookies.get('loggedIn') === '1';
+const getCurrentPath = () => window.location.pathname;
 
 // Global (context) variables that can be easily accessed from any React component
 // https://facebook.github.io/react/docs/context.html
@@ -47,10 +43,13 @@ const context = {
   fetch: createFetch(fetch, {
     baseUrl: window.App.apiUrl,
   }),
-  isLoggedIn: () => Cookies.get('loggedIn') === '1',
+  isLoggedIn,
+  getCurrentPath,
+  storeForwardingPath: () => {
+    Cookies.set('forwardingPath', getCurrentPath(), { expires: 180 });
+  },
   authenticateUser: createAuthenticateUser({
-    cookies,
-    getLocation: () => window.location.pathname,
+    isLoggedIn,
   }),
 };
 
