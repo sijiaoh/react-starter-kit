@@ -13,6 +13,7 @@ import ReactDOM from 'react-dom';
 import deepForceUpdate from 'react-deep-force-update';
 import queryString from 'query-string';
 import { createPath } from 'history';
+import Cookies from 'js-cookie';
 import App from './components/App';
 import createFetch from './createFetch';
 import history from './history';
@@ -81,7 +82,11 @@ async function onLocationChange(location, action) {
 
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
-      <App context={context} insertCss={insertCss}>
+      <App
+        context={context}
+        loggedIn={Cookies.get('loggedIn') === '1'}
+        insertCss={insertCss}
+      >
         {route.component}
       </App>,
       container,

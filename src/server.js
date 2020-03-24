@@ -80,6 +80,7 @@ app.use((err, req, res, next) => {
     console.error('[express-jwt-error]', req.cookies.id_token);
     // `clearCookie`, otherwise user can't use web-app until cookie expires
     res.clearCookie('id_token');
+    res.clearCookie('loggedIn');
   }
   next(err);
 });
@@ -106,6 +107,9 @@ app.use(passport.initialize());
       res.cookie('id_token', token, {
         maxAge: 1000 * expiresIn,
         httpOnly: true,
+      });
+      res.cookie('loggedIn', 1, {
+        maxAge: 1000 * expiresIn,
       });
       res.redirect('/');
     },
@@ -167,7 +171,11 @@ app.get('*', async (req, res, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <App context={context} insertCss={insertCss}>
+      <App
+        context={context}
+        loggedIn={req.cookies.loggedIn === '1'}
+        insertCss={insertCss}
+      >
         {route.component}
       </App>,
     );

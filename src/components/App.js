@@ -7,7 +7,7 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import StyleContext from 'isomorphic-style-loader/StyleContext';
@@ -36,12 +36,21 @@ import ApplicationContext from './ApplicationContext';
  *   );
  */
 
-export default function App({ context, insertCss, children }) {
+export default function App({ context, loggedIn, insertCss, children }) {
   // NOTE: If you need to add or modify header, footer etc. of the app,
   // please do that inside the Layout component.
+
+  const [loggedInState, setLoggedInState] = useState(loggedIn);
+
   return (
     <StyleContext.Provider value={{ insertCss }}>
-      <ApplicationContext.Provider value={{ ...context }}>
+      <ApplicationContext.Provider
+        value={{
+          ...context,
+          loggedIn: loggedInState,
+          logout: () => setLoggedInState(false),
+        }}
+      >
         {React.Children.only(children)}
       </ApplicationContext.Provider>
     </StyleContext.Provider>
@@ -58,5 +67,6 @@ App.propTypes = {
     pathname: PropTypes.string.isRequired,
     query: PropTypes.object,
   }).isRequired,
+  loggedIn: PropTypes.bool.isRequired,
   children: PropTypes.element.isRequired,
 };

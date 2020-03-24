@@ -4,6 +4,10 @@ const ApplicationContext = React.createContext({
   fetch: () => {
     throw new Error('Fetch method not initialized.');
   },
+  loggedIn: false,
+  logout: () => {
+    throw new Error('Logout method not initialized.');
+  },
 });
 
 export default ApplicationContext;
