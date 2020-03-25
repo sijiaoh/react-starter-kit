@@ -21,6 +21,7 @@ import { updateMeta } from './DOMUtils';
 import router from './router';
 import globalContext from './globalContext';
 import createAuthenticateUser from './createAuthenticateUser';
+import createFetchGraphql from './createFetchGraphql';
 
 // Enables critical path CSS rendering
 // https://github.com/kriasoft/isomorphic-style-loader
@@ -32,6 +33,11 @@ const insertCss = (...styles) => {
   };
 };
 
+// Universal HTTP client
+const myFetch = createFetch(fetch, {
+  baseUrl: window.App.apiUrl,
+});
+
 const isLoggedIn = () => Cookies.get('loggedIn') === '1';
 const getCurrentPath = () => window.location.pathname;
 
@@ -39,10 +45,7 @@ const getCurrentPath = () => window.location.pathname;
 // https://facebook.github.io/react/docs/context.html
 const context = {
   ...globalContext,
-  // Universal HTTP client
-  fetch: createFetch(fetch, {
-    baseUrl: window.App.apiUrl,
-  }),
+  fetch: myFetch,
   isLoggedIn,
   getCurrentPath,
   storeForwardingPath: () => {
@@ -51,6 +54,7 @@ const context = {
   authenticateUser: createAuthenticateUser({
     isLoggedIn,
   }),
+  fetchGraphql: createFetchGraphql(myFetch),
 };
 
 const container = document.getElementById('app');

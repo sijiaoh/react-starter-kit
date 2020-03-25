@@ -70,6 +70,7 @@ App.propTypes = {
     getCurrentPath: PropTypes.func.isRequired,
     storeForwardingPath: PropTypes.func.isRequired,
     authenticateUser: PropTypes.func.isRequired,
+    fetchGraphql: PropTypes.func.isRequired,
   }).isRequired,
   children: PropTypes.element.isRequired,
 };

@@ -15,18 +15,12 @@ import Link from '../Link';
 import ApplicationContext from '../ApplicationContext';
 
 export default function Navigation() {
-  const { fetch, loggedIn, logout } = useContext(ApplicationContext);
+  const { fetchGraphql, loggedIn, logout } = useContext(ApplicationContext);
   useStyles(s);
 
   const onClickLogout = async () => {
-    const resp = await fetch('/graphql', {
-      body: JSON.stringify({
-        query: 'mutation{logout}',
-      }),
-    });
-    const { data } = await resp.json();
-    if (!data || !data.logout) throw new Error('Failed to logout.');
-
+    const data = await fetchGraphql('mutation{logout}');
+    if (!data.logout) throw new Error('Failed to logout.');
     logout();
   };
 

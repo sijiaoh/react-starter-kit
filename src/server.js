@@ -32,6 +32,7 @@ import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unr
 import config from './config';
 import globalContext from './globalContext';
 import createAuthenticateUser from './createAuthenticateUser';
+import createFetchGraphql from './createFetchGraphql';
 
 const models = require('./data/models');
 
@@ -154,9 +155,6 @@ app.get('*', async (req, res, next) => {
     });
 
     const isLoggedIn = () => req.cookies.loggedIn === '1';
-    const authenticateUser = createAuthenticateUser({
-      isLoggedIn,
-    });
     const getCurrentPath = () => decodeURI(req.path);
 
     // Global (context) variables that can be easily accessed from any React component
@@ -174,7 +172,10 @@ app.get('*', async (req, res, next) => {
           maxAge: 1000 * 60 * 60 * 24 * 180, // 180 days
         });
       },
-      authenticateUser,
+      authenticateUser: createAuthenticateUser({
+        isLoggedIn,
+      }),
+      fetchGraphql: createFetchGraphql(fetch),
     };
 
     const route = await router.resolve(context);
