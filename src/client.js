@@ -46,6 +46,7 @@ const getCurrentPath = () => window.location.pathname;
 const context = {
   ...globalContext,
   fetch: myFetch,
+  fetchGraphql: createFetchGraphql(myFetch),
   isLoggedIn,
   getCurrentPath,
   storeForwardingPath: () => {
@@ -54,7 +55,6 @@ const context = {
   authenticateUser: createAuthenticateUser({
     isLoggedIn,
   }),
-  fetchGraphql: createFetchGraphql(myFetch),
 };
 
 const container = document.getElementById('app');

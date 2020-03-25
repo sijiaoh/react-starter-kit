@@ -162,6 +162,7 @@ app.get('*', async (req, res, next) => {
     const context = {
       ...globalContext,
       fetch,
+      fetchGraphql: createFetchGraphql(fetch),
       // The twins below are wild, be careful!
       pathname: req.path,
       query: req.query,
@@ -175,7 +176,6 @@ app.get('*', async (req, res, next) => {
       authenticateUser: createAuthenticateUser({
         isLoggedIn,
       }),
-      fetchGraphql: createFetchGraphql(fetch),
     };
 
     const route = await router.resolve(context);
