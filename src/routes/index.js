@@ -9,6 +9,20 @@
 
 /* eslint-disable global-require */
 
+import files from 'files.macro';
+
+const excludes = ['index.js', 'home', 'not-found', 'error'];
+const children = JSON.parse(files('./'))
+  .filter(file => !excludes.some(exclude => exclude === file))
+  .map(file => ({
+    path: `/${file}`,
+    load: () =>
+      import(
+        /* webpackChunkName: '[request]' */
+        `./${file}`
+      ),
+  }));
+
 // The top-level (parent) route
 const routes = {
   path: '',
@@ -19,30 +33,8 @@ const routes = {
       path: '',
       load: () => import(/* webpackChunkName: 'home' */ './home'),
     },
-    {
-      path: '/contact',
-      load: () => import(/* webpackChunkName: 'contact' */ './contact'),
-    },
-    {
-      path: '/login',
-      load: () => import(/* webpackChunkName: 'login' */ './login'),
-    },
-    {
-      path: '/register',
-      load: () => import(/* webpackChunkName: 'register' */ './register'),
-    },
-    {
-      path: '/about',
-      load: () => import(/* webpackChunkName: 'about' */ './about'),
-    },
-    {
-      path: '/privacy',
-      load: () => import(/* webpackChunkName: 'privacy' */ './privacy'),
-    },
-    {
-      path: '/admin',
-      load: () => import(/* webpackChunkName: 'admin' */ './admin'),
-    },
+
+    ...children,
 
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {
