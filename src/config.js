@@ -15,7 +15,11 @@ if (process.env.BROWSER) {
   );
 }
 
+const projectName = 'react-starter-kit';
+
 module.exports = {
+  projectName,
+
   // Node.js app
   port: process.env.PORT || 3000,
 
@@ -37,7 +41,7 @@ module.exports = {
   databasePort: process.env.DATABASE_PORT || '3306',
   databaseUsername: process.env.DATABASE_USERNAME || 'root',
   databasePassword: process.env.DATABASE_PASSWORD || '',
-  databaseName: process.env.DATABASE_NAME || 'react_starter_kit',
+  databaseName: process.env.DATABASE_NAME || projectName,
 
   // Web analytics
   analytics: {
