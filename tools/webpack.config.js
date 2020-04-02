@@ -58,7 +58,7 @@ const config = {
 
   resolve: {
     // Allow absolute paths in imports, e.g. import Button from 'components/Button'
-    // Keep in sync with .flowconfig and .eslintrc
+    // Keep in sync with .eslintrc
     modules: ['node_modules', 'src'],
   },
 
@@ -94,9 +94,6 @@ const config = {
                 debug: false,
               },
             ],
-            // Flow
-            // https://github.com/babel/babel/tree/master/packages/babel-preset-flow
-            '@babel/preset-flow',
             // JSX
             // https://github.com/babel/babel/tree/master/packages/babel-preset-react
             ['@babel/preset-react', { development: isDebug }],
