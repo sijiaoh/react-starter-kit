@@ -140,14 +140,14 @@
     "test-watch": "yarn run test --watch --notify",
     "test-cover": "yarn run test --coverage",
     "coverage": "yarn run test-cover && opn coverage/lcov-report/index.html",
-    "clean": "babel-node tools/run clean",
-    "copy": "babel-node tools/run copy",
-    "bundle": "babel-node tools/run bundle",
-    "build": "babel-node tools/run build",
+    "clean": "babel-node --extensions '.tsx' tools/run clean",
+    "copy": "babel-node --extensions '.tsx' tools/run copy",
+    "bundle": "babel-node --extensions '.tsx' tools/run bundle",
+    "build": "babel-node --extensions '.tsx' tools/run build",
     "build-stats": "yarn run build --release --analyse",
-    "deploy": "babel-node tools/run deploy",
-    "render": "babel-node tools/run render",
-    "serve": "babel-node tools/run runServer",
-    "start": "babel-node tools/run start"
+    "deploy": "babel-node --extensions '.tsx' tools/run deploy",
+    "render": "babel-node --extensions '.tsx' tools/run render",
+    "serve": "babel-node --extensions '.tsx' tools/run runServer",
+    "start": "babel-node --extensions '.tsx' tools/run start"
   }
 }

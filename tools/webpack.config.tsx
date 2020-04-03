@@ -15,6 +15,7 @@ import nodeExternals from 'webpack-node-externals';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import overrideRules from './lib/overrideRules';
 import pkg from '../package.json';
+import postcssConfig from './postcss.config';
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 const resolvePath = (...args) => path.resolve(ROOT_DIR, ...args);
@@ -26,7 +27,7 @@ const isVerbose = process.argv.includes('--verbose');
 const isAnalyze =
   process.argv.includes('--analyze') || process.argv.includes('--analyse');
 
-const reScript = /\.(js|jsx|mjs)$/;
+const reScript = /\.(js|tsx|mjs)$/;
 const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
 const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 const staticAssetName = isDebug
@@ -35,7 +36,7 @@ const staticAssetName = isDebug
 
 //
 // Common configuration chunk to be used for both
-// client-side (client.js) and server-side (server.js) bundles
+// client-side (client.tsx) and server-side (server.tsx) bundles
 // -----------------------------------------------------------------------------
 
 const config = {
@@ -57,6 +58,7 @@ const config = {
   },
 
   resolve: {
+    extensions: ['.js', '.tsx'],
     // Allow absolute paths in imports, e.g. import Button from 'components/Button'
     // Keep in sync with .eslintrc
     modules: ['node_modules', 'src'],
@@ -67,7 +69,7 @@ const config = {
     strictExportPresence: true,
 
     rules: [
-      // Rules for JS / JSX
+      // Rules for JS / TSX
       {
         test: reScript,
         include: [SRC_DIR, resolvePath('tools')],
@@ -154,11 +156,7 @@ const config = {
           // Apply PostCSS plugins including autoprefixer
           {
             loader: 'postcss-loader',
-            options: {
-              config: {
-                path: './tools/postcss.config.js',
-              },
-            },
+            options: postcssConfig,
           },
 
           // Compile Less to CSS
@@ -227,7 +225,7 @@ const config = {
       // Convert Markdown into HTML
       {
         test: /\.md$/,
-        loader: path.resolve(__dirname, './lib/markdown-loader.js'),
+        loader: path.resolve(__dirname, './lib/markdown-loader.tsx'),
       },
 
       // Return public URL for all assets unless explicitly excluded
@@ -280,7 +278,7 @@ const config = {
 };
 
 //
-// Configuration for the client-side bundle (client.js)
+// Configuration for the client-side bundle (client.tsx)
 // -----------------------------------------------------------------------------
 
 const clientConfig = {
@@ -290,7 +288,7 @@ const clientConfig = {
   target: 'web',
 
   entry: {
-    client: ['@babel/polyfill', './src/client.js'],
+    client: ['@babel/polyfill', './src/client'],
   },
 
   plugins: [
@@ -373,7 +371,7 @@ const clientConfig = {
 };
 
 //
-// Configuration for the server-side bundle (server.js)
+// Configuration for the server-side bundle (server.tsx)
 // -----------------------------------------------------------------------------
 
 const serverConfig = {
@@ -383,7 +381,7 @@ const serverConfig = {
   target: 'node',
 
   entry: {
-    server: ['@babel/polyfill', './src/server.js'],
+    server: ['@babel/polyfill', './src/server'],
   },
 
   output: {

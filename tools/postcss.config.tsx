@@ -18,7 +18,7 @@ const minimizeCssOptions = {
   discardComments: { removeAll: true },
 };
 
-module.exports = () => ({
+export default {
   // The list of plugins for PostCSS
   // https://github.com/postcss/postcss
   plugins: [
@@ -54,4 +54,4 @@ module.exports = () => ({
           }),
         ]),
   ],
-});
+};
