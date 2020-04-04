@@ -9,19 +9,14 @@
 
 /* eslint-disable global-require */
 
-import files from 'files.macro';
-
-const excludes = ['index.js', 'home', 'not-found', 'error'];
-const children = JSON.parse(files('./'))
-  .filter(file => !excludes.some(exclude => exclude === file))
-  .map(file => ({
-    path: `/${file}`,
-    load: () =>
-      import(
-        /* webpackChunkName: '[request]' */
-        `./${file}`
-      ),
-  }));
+const generateChild = ({ path, file }) => {
+  // eslint-disable-next-line no-param-reassign
+  if (path === undefined) path = file;
+  return {
+    path: `/${path}`,
+    load: () => import(/* webpackChunkName: '[request]' */ `./${file}`),
+  };
+};
 
 // The top-level (parent) route
 const routes = {
@@ -34,7 +29,9 @@ const routes = {
       load: () => import(/* webpackChunkName: 'home' */ './home'),
     },
 
-    ...children,
+    generateChild({ file: 'login' }),
+    generateChild({ file: 'about' }),
+    generateChild({ file: 'contact' }),
 
     // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
     {
