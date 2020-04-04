@@ -74,6 +74,7 @@
     "file-loader": "^4.2.0",
     "front-matter": "^3.0.2",
     "glob": "^7.1.6",
+    "gts": "^1.1.2",
     "husky": "^3.0.9",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
@@ -112,7 +113,9 @@
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-dev-middleware": "^3.3.0",
     "webpack-hot-middleware": "^2.24.2",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "typescript": "~3.7.0",
+    "@types/node": "^10.0.3"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -130,12 +133,14 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "lint-ts": "gts check src/**/*.tsx tools/**/*.tsx",
     "lint-js": "eslint --ignore-path .gitignore --ignore-pattern \"!**/.*\" .",
     "lint-css": "stylelint \"src/**/*.{css,less,styl,scss,sass,sss}\"",
-    "lint": "yarn run lint-js && yarn run lint-css",
+    "lint": "yarn run lint-ts && yarn run lint-js && yarn run lint-css",
+    "fix-ts": "gts fix src/**/*.tsx tools/**/*.tsx",
     "fix-js": "yarn run lint-js --fix",
     "fix-css": "yarn run lint-css --fix",
-    "fix": "yarn run fix-js && yarn run fix-css",
+    "fix": "yarn run fix-ts && yarn run fix-js && yarn run fix-css",
     "test": "jest",
     "test-watch": "yarn run test --watch --notify",
     "test-cover": "yarn run test --coverage",
