@@ -30,6 +30,7 @@ const routes = {
     },
 
     generateChild({ file: 'login' }),
+    generateChild({ file: 'register' }),
     generateChild({ file: 'about' }),
     generateChild({ file: 'contact' }),
 
