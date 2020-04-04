@@ -8,8 +8,8 @@
  */
 
 import React from 'react';
+import Layout from 'components/Layout';
 import Home from './Home';
-import Layout from '../../components/Layout';
 
 async function action({ fetchGraphql }) {
   const data = await fetchGraphql('{news{title,link,content}}');
